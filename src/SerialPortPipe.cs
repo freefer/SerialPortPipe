@@ -27,10 +27,9 @@ namespace ConsoleApp1
         private Task writing;
         private Task reading;
         private CancellationTokenSource _cts = new CancellationTokenSource();
-        //private byte[] _beginMark = new byte[] { 0xBB, 0x55 };
-        //private byte[] _endMark = new byte[] { 0X7E, 0X7E };
-        private readonly static byte[] _beginMark = new byte[] { (byte)'@' };
-        private readonly static byte[] _endMark = new byte[] { (byte)'!' };
+        private byte[] _beginMark = new byte[] { 0xBB, 0x55 };
+        private byte[] _endMark = new byte[] { 0X7E, 0X7E };
+
         public int MaxPackageLength { get; set; } = 1024 * 1024;
         public SerialPortPipe()
         {
