@@ -27,9 +27,10 @@ namespace ConsoleApp1
         private Task writing;
         private Task reading;
         private CancellationTokenSource _cts = new CancellationTokenSource();
-        private byte[] _beginMark = new byte[] { 0xBB, 0x55 };
-        private byte[] _endMark = new byte[] { 0X7E, 0X7E };
-
+        //private byte[] _beginMark = new byte[] { 0xBB, 0x55 };
+        //private byte[] _endMark = new byte[] { 0X7E, 0X7E };
+        private readonly static byte[] _beginMark = new byte[] { (byte)'@' };
+        private readonly static byte[] _endMark = new byte[] { (byte)'!' };
         public int MaxPackageLength { get; set; } = 1024 * 1024;
         public SerialPortPipe()
         {
@@ -75,8 +76,8 @@ namespace ConsoleApp1
 
                     await writer.WriteAsync(buffer.AsMemory(0, bytesRead));
 
-                     //Make the data available to the PipeReader.
-                     FlushResult result = await writer.FlushAsync();
+                    //Make the data available to the PipeReader.
+                    FlushResult result = await writer.FlushAsync();
 
                     if (result.IsCompleted)
                     {
@@ -127,7 +128,7 @@ namespace ConsoleApp1
 
                 try
                 {
-                    if (Filter(ref buffer, out ReadOnlySequence<byte> package))
+                    while (Filter(ref buffer, out ReadOnlySequence<byte> package))
                     {
                         Console.WriteLine(BitConverter.ToString(package.ToArray()));
                     }
